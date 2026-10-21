@@ -166,6 +166,7 @@ class _SessionScreenState extends State<SessionScreen> {
       Navigator.pop(context);
       return;
     }
+    final wasRunning = t.state == TimerState.running;
     t.stop();
     final finished = t.state == TimerState.finished;
     final choice = await showDialog<String>(
@@ -191,8 +192,8 @@ class _SessionScreenState extends State<SessionScreen> {
     } else if (choice == 'save') {
       final ok = await _saveLog(finished ? 'finished' : 'cancelled');
       if (ok && mounted) Navigator.pop(context);
-    } else if (t.state == TimerState.paused) {
-      // they were running before, so carry on
+    } else if (wasRunning) {
+      // it was running before the dialog, so carry on
       t.resume();
     }
   }
