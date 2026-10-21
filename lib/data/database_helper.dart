@@ -6,7 +6,8 @@ import '../models/focus_preset.dart';
 class DatabaseHelper {
   DatabaseHelper._(this._path);
 
-  static final DatabaseHelper instance = DatabaseHelper._('focus_studio.db');
+  // not final so tests can swap in a temp database
+  static DatabaseHelper instance = DatabaseHelper._('focus_studio.db');
 
   // tests use this to get a throwaway database
   factory DatabaseHelper.forPath(String path) => DatabaseHelper._(path);
