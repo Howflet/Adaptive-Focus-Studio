@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/focus_preset.dart';
+import '../models/session_log.dart';
 
 class DatabaseHelper {
   DatabaseHelper._(this._path);
@@ -92,6 +93,15 @@ class DatabaseHelper {
     if (err != null) throw ArgumentError(err);
     final db = await database;
     return db.update('FocusPreset', p.toMap(), where: 'id = ?', whereArgs: [p.id]);
+  }
+
+  // ---- SessionLog (just insert for now, the rest comes with the history screen) ----
+
+  Future<int> insertLog(SessionLog log) async {
+    final err = log.validate();
+    if (err != null) throw ArgumentError(err);
+    final db = await database;
+    return db.insert('SessionLog', log.toMap()..remove('id'));
   }
 
   // how many logs would go away if this preset is deleted (for the dialog)
