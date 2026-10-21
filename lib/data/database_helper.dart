@@ -109,4 +109,16 @@ class DatabaseHelper {
       await txn.delete('FocusPreset', where: 'id = ?', whereArgs: [id]);
     });
   }
+
+  // average completed minutes over finished sessions, and how many there were
+  Future<({double? averageMinutes, int count})> getAverageCompleted() async {
+    final db = await database;
+    final rows = await db.rawQuery(
+        "SELECT AVG(completedSeconds) AS avg, COUNT(*) AS c FROM SessionLog "
+        "WHERE status = ? AND completedSeconds > 0",
+        ['finished']);
+    final avg = rows.first['avg'] as num?;
+    final count = rows.first['c'] as int;
+    return (averageMinutes: avg == null ? null : avg / 60, count: count);
+  }
 }
