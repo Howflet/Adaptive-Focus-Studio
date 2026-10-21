@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/history_screen.dart';
+import 'screens/log_editor_screen.dart';
 import 'screens/preset_editor_screen.dart';
 import 'screens/presets_screen.dart';
 import 'screens/session_screen.dart';
@@ -36,6 +37,7 @@ class FocusApp extends StatelessWidget {
         PresetEditorScreen.route: (_) => const PresetEditorScreen(),
         SessionScreen.route: (_) => const SessionScreen(),
         HistoryScreen.route: (_) => const HistoryScreen(),
+        LogEditorScreen.route: (_) => const LogEditorScreen(),
         SettingsScreen.route: (_) => const SettingsScreen(),
       },
     );
