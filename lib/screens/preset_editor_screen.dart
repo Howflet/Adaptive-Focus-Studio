@@ -39,6 +39,7 @@ class _PresetEditorScreenState extends State<PresetEditorScreen> {
       _mood = arg.moodTag;
       _minutes = arg.plannedSeconds / 60;
     }
+    _loadLogs();
   }
 
   // Session Scout reads the saved sessions
