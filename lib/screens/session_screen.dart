@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../data/database_helper.dart';
+import '../data/settings_store.dart';
 import '../helpers/clock.dart';
 import '../helpers/session_timer.dart';
 import '../models/focus_preset.dart';
@@ -107,13 +109,18 @@ class _SessionScreenState extends State<SessionScreen> {
     // finish() only works once, so tapping it a lot is fine
     if (_timer!.finish()) {
       _ticker?.cancel();
+      if (SettingsStore.instance.current.value.soundEnabled) {
+        SystemSound.play(SystemSoundType.click);
+      }
     }
     if (mounted) setState(() {});
   }
 
   Future<void> _reset() async {
-    final ok = await _confirm('Reset the timer?', 'The time so far will be lost.', 'Reset');
-    if (ok != true || !mounted) return;
+    if (SettingsStore.instance.current.value.confirmBeforeReset) {
+      final ok = await _confirm('Reset the timer?', 'The time so far will be lost.', 'Reset');
+      if (ok != true || !mounted) return;
+    }
     _ticker?.cancel();
     _timer!.reset();
     setState(() => _saved = false);
