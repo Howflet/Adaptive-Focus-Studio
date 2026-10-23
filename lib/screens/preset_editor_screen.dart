@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../data/database_helper.dart';
+import '../helpers/session_scout.dart';
 import '../models/focus_preset.dart';
+import '../models/session_log.dart';
+import '../widgets/scout_card.dart';
 
 // Pass a FocusPreset as the route argument to edit it, nothing to create new.
 class PresetEditorScreen extends StatefulWidget {
@@ -21,6 +24,8 @@ class _PresetEditorScreenState extends State<PresetEditorScreen> {
   bool _loadedArgs = false;
   bool _saving = false;
   String? _labelError;
+  List<SessionLog> _logs = [];
+  bool _scoutDismissed = false;
 
   @override
   void didChangeDependencies() {
@@ -34,6 +39,22 @@ class _PresetEditorScreenState extends State<PresetEditorScreen> {
       _mood = arg.moodTag;
       _minutes = arg.plannedSeconds / 60;
     }
+  }
+
+  // Session Scout reads the saved sessions
+  Future<void> _loadLogs() async {
+    try {
+      final rows = await DatabaseHelper.instance.getLogs();
+      if (!mounted) return;
+      setState(() => _logs = [for (final r in rows) r.log]);
+    } catch (e) {
+      // no history means the card just says not enough history
+    }
+  }
+
+  // only fills the slider, nothing is saved until Save is pressed
+  void _applySuggestion(int minutes) {
+    setState(() => _minutes = minutes.toDouble());
   }
 
   @override
@@ -107,7 +128,10 @@ class _PresetEditorScreenState extends State<PresetEditorScreen> {
             items: [
               for (final m in moodTags) DropdownMenuItem(value: m, child: Text(m)),
             ],
-            onChanged: (v) => setState(() => _mood = v ?? _mood),
+            onChanged: (v) => setState(() {
+              _mood = v ?? _mood;
+              _scoutDismissed = false;
+            }),
           ),
           const SizedBox(height: 16),
           const Text('Planned duration (minutes)'),
@@ -123,7 +147,17 @@ class _PresetEditorScreenState extends State<PresetEditorScreen> {
             child: Text('${_minutes.round()} min',
                 style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
-          // Session Scout suggestion card goes here later
+          if (!_scoutDismissed) ...[
+            const SizedBox(height: 16),
+            Builder(builder: (context) {
+              final result = suggestDuration(_logs, _mood);
+              return ScoutCard(
+                result: result,
+                onApply: () => _applySuggestion(result.minutes!),
+                onDismiss: () => setState(() => _scoutDismissed = true),
+              );
+            }),
+          ],
           const SizedBox(height: 24),
           Row(
             children: [
