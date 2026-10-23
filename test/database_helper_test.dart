@@ -3,6 +3,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:adaptive_focus_studio/data/database_helper.dart';
 import 'package:adaptive_focus_studio/models/focus_preset.dart';
+import 'package:adaptive_focus_studio/models/session_log.dart';
 
 void main() {
   sqfliteFfiInit();
@@ -99,5 +100,77 @@ void main() {
     await helper.deletePreset(id);
     expect(await helper.getPreset(id), isNull);
     expect(await helper.countLogsForPreset(id), 0);
+  });
+
+  SessionLog sampleLog(int presetId, {int seconds = 1200, String? when}) => SessionLog(
+        presetId: presetId,
+        startedAt: when ?? '2026-10-19T10:00:00',
+        plannedSecondsSnapshot: 1500,
+        completedSeconds: seconds,
+        moodTagSnapshot: 'Calm',
+        status: 'finished',
+        source: 'manual',
+      );
+
+  test('log insert, read newest first, update and delete', () async {
+    final pid = await helper.insertPreset(sample());
+    final a = await helper.insertLog(sampleLog(pid, when: '2026-10-18T10:00:00'));
+    await helper.insertLog(sampleLog(pid, when: '2026-10-19T10:00:00'));
+
+    var rows = await helper.getLogs();
+    expect(rows.length, 2);
+    expect(rows.first.log.startedAt, '2026-10-19T10:00:00'); // newest first
+    expect(rows.first.presetLabel, 'Chem reading');
+
+    final old = rows.firstWhere((r) => r.log.id == a).log;
+    await helper.updateLog(SessionLog(
+      id: old.id,
+      presetId: old.presetId,
+      startedAt: old.startedAt,
+      plannedSecondsSnapshot: old.plannedSecondsSnapshot,
+      completedSeconds: 600,
+      moodTagSnapshot: old.moodTagSnapshot,
+      status: old.status,
+      source: old.source,
+      note: 'fixed',
+    ));
+    rows = await helper.getLogs();
+    expect(rows.firstWhere((r) => r.log.id == a).log.completedSeconds, 600);
+    expect(rows.firstWhere((r) => r.log.id == a).log.note, 'fixed');
+
+    await helper.deleteLog(a);
+    expect((await helper.getLogs()).length, 1);
+  });
+
+  test('totals add up and refresh after changes', () async {
+    final pid = await helper.insertPreset(sample());
+    expect((await helper.getTotals()).count, 0);
+    final id = await helper.insertLog(sampleLog(pid, seconds: 600));
+    await helper.insertLog(sampleLog(pid, seconds: 1200));
+    var t = await helper.getTotals();
+    expect(t.totalSeconds, 1800);
+    expect(t.count, 2);
+    await helper.deleteLog(id);
+    t = await helper.getTotals();
+    expect(t.totalSeconds, 1200);
+    expect(t.count, 1);
+  });
+
+  test('bad logs are rejected', () async {
+    final pid = await helper.insertPreset(sample());
+    expect(() => helper.insertLog(sampleLog(pid, seconds: -5)), throwsArgumentError);
+    final future = DateTime.now().add(const Duration(days: 3)).toIso8601String();
+    expect(() => helper.insertLog(sampleLog(pid, when: future)), throwsArgumentError);
+    expect(
+        () => helper.insertLog(SessionLog(
+            presetId: pid,
+            startedAt: '2026-10-19T10:00:00',
+            plannedSecondsSnapshot: 1500,
+            completedSeconds: 10,
+            moodTagSnapshot: 'Calm',
+            status: 'finished',
+            source: 'manual',
+            note: 'x' * 201)),
+        throwsArgumentError);
   });
 }

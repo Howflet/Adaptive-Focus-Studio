@@ -28,6 +28,12 @@ class SessionLog {
     if (status != 'finished' && status != 'cancelled') return 'Bad status';
     if (source != 'timer' && source != 'manual') return 'Bad source';
     if (note != null && note!.length > 200) return 'Note can be 200 characters max';
+    final started = DateTime.tryParse(startedAt);
+    if (started == null) return 'Bad date';
+    // a minute of slack so "now" doesn't count as the future
+    if (started.isAfter(DateTime.now().add(const Duration(minutes: 1)))) {
+      return 'Date can\'t be in the future';
+    }
     return null;
   }
 

@@ -95,13 +95,50 @@ class DatabaseHelper {
     return db.update('FocusPreset', p.toMap(), where: 'id = ?', whereArgs: [p.id]);
   }
 
-  // ---- SessionLog (just insert for now, the rest comes with the history screen) ----
+  // ---- SessionLog ----
 
   Future<int> insertLog(SessionLog log) async {
     final err = log.validate();
     if (err != null) throw ArgumentError(err);
     final db = await database;
     return db.insert('SessionLog', log.toMap()..remove('id'));
+  }
+
+  // newest first, with the preset's label for the list rows
+  Future<List<({SessionLog log, String presetLabel})>> getLogs() async {
+    final db = await database;
+    final rows = await db.rawQuery(
+        'SELECT SessionLog.*, FocusPreset.label AS presetLabel '
+        'FROM SessionLog JOIN FocusPreset ON FocusPreset.id = SessionLog.presetId '
+        'ORDER BY SessionLog.startedAt DESC');
+    return [
+      for (final r in rows)
+        (log: SessionLog.fromMap(r), presetLabel: r['presetLabel'] as String),
+    ];
+  }
+
+  Future<int> updateLog(SessionLog log) async {
+    if (log.id == null) throw ArgumentError('Log has no id');
+    final err = log.validate();
+    if (err != null) throw ArgumentError(err);
+    final db = await database;
+    return db.update('SessionLog', log.toMap(), where: 'id = ?', whereArgs: [log.id]);
+  }
+
+  Future<int> deleteLog(int id) async {
+    final db = await database;
+    return db.delete('SessionLog', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // total completed seconds over every log, and how many logs
+  Future<({int totalSeconds, int count})> getTotals() async {
+    final db = await database;
+    final rows = await db.rawQuery(
+        'SELECT COALESCE(SUM(completedSeconds), 0) AS total, COUNT(*) AS c FROM SessionLog');
+    return (
+      totalSeconds: (rows.first['total'] as num).toInt(),
+      count: rows.first['c'] as int,
+    );
   }
 
   // how many logs would go away if this preset is deleted (for the dialog)
