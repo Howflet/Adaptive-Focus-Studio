@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/database_helper.dart';
+import '../data/settings_store.dart';
 import '../helpers/session_scout.dart';
 import '../models/focus_preset.dart';
 import '../models/session_log.dart';
@@ -38,6 +39,9 @@ class _PresetEditorScreenState extends State<PresetEditorScreen> {
       _label.text = arg.label;
       _mood = arg.moodTag;
       _minutes = arg.plannedSeconds / 60;
+    } else {
+      // new preset starts at the default from settings
+      _minutes = SettingsStore.instance.current.value.defaultDurationMinutes.toDouble();
     }
     _loadLogs();
   }
