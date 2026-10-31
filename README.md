@@ -16,6 +16,7 @@ Made by Howard Fletcher (sole developer, undergraduate pathway).
 - Kanban evidence PDF: `docs/Kanban_Contribution_Evidence.pdf`
 - Demo video: TODO (link goes here)
 - Slides: `docs/Adaptive_Focus_Studio_Slides.pptx`
+- Curated questions (questions only): `docs/Curated_Questions.docx`
 
 ## What's in it
 
