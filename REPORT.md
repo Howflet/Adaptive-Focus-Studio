@@ -132,6 +132,6 @@ sizes aren't verified yet, and the two-device test is still TODO.
 I'm the only developer, so all of the code, tests and docs are in my repo under
 my account. Commit history: https://github.com/Howflet/Adaptive-Focus-Studio/commits/main
 
-## 8. What I learned (TODO, write in my own words)
+## 8. What I learned
 
 TODO
