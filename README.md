@@ -12,7 +12,7 @@ Made by Howard Fletcher (sole developer, undergraduate pathway).
 
 - GitHub: https://github.com/Howflet/Adaptive-Focus-Studio
 - ClickUp board: https://app.clickup.com/90141788557/v/b/li/901422483479
-- Board snapshots: `docs/snapshots/` (Oct 20 and Oct 23 so far)
+- Board snapshots: `docs/snapshots/` (Oct 20, Oct 23 and Oct 31)
 - Kanban evidence PDF: `docs/Kanban_Contribution_Evidence.pdf`
 - Demo video: TODO (link goes here)
 - Slides: `docs/Adaptive_Focus_Studio_Slides.pptx`
