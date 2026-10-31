@@ -12,10 +12,11 @@ Made by Howard Fletcher (sole developer, undergraduate pathway).
 
 - GitHub: https://github.com/Howflet/Adaptive-Focus-Studio
 - ClickUp board: https://app.clickup.com/90141788557/v/b/li/901422483479
-- Board snapshots: `docs/snapshots/` (Oct 20 and Oct 23 so far)
-- Kanban evidence PDF: `docs/Kanban_Contribution_Evidence.pdf` (TODO, added with the final package)
+- Board snapshots: `docs/snapshots/` (Oct 20, Oct 23 and Oct 31)
+- Kanban evidence PDF: `docs/Kanban_Contribution_Evidence.pdf`
 - Demo video: TODO (link goes here)
-- Slides: TODO (link goes here)
+- Slides: `docs/Adaptive_Focus_Studio_Slides.pptx`
+- Curated questions (questions only): `docs/Curated_Questions.docx`
 
 ## What's in it
 
@@ -131,4 +132,4 @@ Settings are in SharedPreferences: `defaultDurationMinutes` (25),
 - "Sound effects" only plays the phone's built-in click sound when you finish. There are no custom sounds.
 - The tests run SQLite on the computer (sqflite_common_ffi), not on a phone, so they don't replace trying it on a device.
 - Landscape and big text sizes haven't been properly checked yet.
-- TODO: two-device offline test results and the peer observation are not in yet, see REPORT.md.
+- Tested on a Galaxy S22 and on an Android 15 emulator, not on a second physical phone. No peer observation, see REPORT.md.
