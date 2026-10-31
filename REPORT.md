@@ -6,7 +6,7 @@ Howard Fletcher, Mobile App Development, Project 1, Fall 2026
 Repo: https://github.com/Howflet/Adaptive-Focus-Studio
 Board: https://app.clickup.com/90141788557/v/b/li/901422483479
 
-Parts marked **TODO** are things only I can fill in (a second device test, my own
+Parts marked **TODO** are things only I can fill in (the video trace, my own
 reflection). I left them empty on purpose instead of guessing.
 
 ## 1. What I built
@@ -53,16 +53,22 @@ Details in ARCHITECTURE.md.
 
 **Manual test log (Galaxy S22, SM-S901U1, Android 16, release APK, Oct 31):**
 
-I ran this on the S22 by installing the release APK and tapping through it over
-adb. I did not turn on airplane mode (the app has no network code, but I didn't
-check it with the radios off), and I only had one device.
+I ran these on the S22, and again on an Android emulator (Pixel 6 profile,
+Android 15 / API 35, arm64). On both I installed the release APK and tapped
+through it over adb. The emulator was in airplane mode the whole time. I didn't
+turn airplane mode on for the S22, so on the phone the offline part is untested.
+The app has no network code either way.
 
 | # | What I did | Device / emulator | Expected | Actual | Pass? |
 |---|---|---|---|---|---|
-| 1 | Create a preset ("Read chapter 4", Calm, 25 min), force stop the app, reopen | S22 | preset still there | still listed, Calm, 25 min | pass (no airplane mode) |
+| 1 | Create a preset ("Read chapter 4", Calm, 25 min), force stop the app, reopen | S22 | preset still there | still listed, Calm, 25 min | pass (airplane mode off) |
+| 1b | Same, with airplane mode on | emulator | preset still there | still listed, Calm, 25 min | pass |
 | 2 | Run a 65 second session, finish, save, force stop, reopen | S22 | session in history, average updated | History shows "1 / 25 min, finished, timer", total 1 min, home tile "1 min (from 1 sessions)" | pass |
-| 3 | Same two tests on a second device or emulator | not tested | same | not tested | not tested |
+| 3 | Same session test on a second device | emulator, airplane mode on | same | same: receipt 65 s, History "1 / 25 min", home tile "1 min (from 1 sessions)" | pass |
 | 4 | Turn on Sound effects, force stop, reopen Settings | S22 | setting kept | first try: "Couldn't save settings." and it reset to off. After the fix below: stayed on | fail, then pass |
+| 4b | Same setting test after the fix | emulator, airplane mode on | setting kept | stayed on, no error | pass |
+
+The emulator is a second environment, not a second physical phone.
 
 Test 4 found a real bug that the 56 automated tests couldn't see. In the release
 build the settings never saved. The log showed a `NoSuchMethodError` from the
@@ -120,7 +126,7 @@ Session Scout: card, PR 7, `test/session_scout_test.dart`).
 
 See the list in README.md. The main ones: Session Scout can't see trends,
 a running timer isn't restored after the app is killed, landscape and big text
-sizes aren't verified yet, and the two-device test is still TODO.
+sizes aren't verified yet, and I haven't tried a second physical phone, only an emulator.
 
 ## 7. Contribution
 
