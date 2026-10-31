@@ -51,17 +51,25 @@ fake clock, Session Scout cases C1 to C7, and widget flows for every screen,
 including "save, restart, still there" and "tap save five times, one log".
 Details in ARCHITECTURE.md.
 
-**Manual test log (TODO, fill in):**
+**Manual test log (Galaxy S22, SM-S901U1, Android 16, release APK, Oct 31):**
+
+I ran this on the S22 by installing the release APK and tapping through it over
+adb. I did not turn on airplane mode (the app has no network code, but I didn't
+check it with the radios off), and I only had one device.
 
 | # | What I did | Device / emulator | Expected | Actual | Pass? |
 |---|---|---|---|---|---|
-| 1 | Airplane mode, create a preset, force close, reopen | TODO | preset still there | TODO | TODO |
-| 2 | Run a session, finish, save, reopen | TODO | session in history, average updated | TODO | TODO |
-| 3 | Same two tests on a second device or emulator | TODO | same | TODO | TODO |
-| 4 | Change a setting, force close, reopen | TODO | setting kept | TODO | TODO |
+| 1 | Create a preset ("Read chapter 4", Calm, 25 min), force stop the app, reopen | S22 | preset still there | still listed, Calm, 25 min | pass (no airplane mode) |
+| 2 | Run a 65 second session, finish, save, force stop, reopen | S22 | session in history, average updated | History shows "1 / 25 min, finished, timer", total 1 min, home tile "1 min (from 1 sessions)" | pass |
+| 3 | Same two tests on a second device or emulator | not tested | same | not tested | not tested |
+| 4 | Turn on Sound effects, force stop, reopen Settings | S22 | setting kept | first try: "Couldn't save settings." and it reset to off. After the fix below: stayed on | fail, then pass |
 
-I ran the demo on a device, but I haven't written down the results of a proper
-two-device offline test yet.
+Test 4 found a real bug that the 56 automated tests couldn't see. In the release
+build the settings never saved. The log showed a `NoSuchMethodError` from the
+shared_preferences plugin, which points to R8 shrinking removing a method the
+plugin needs. Turning off minify and shrinkResources for the release build in
+`android/app/build.gradle.kts` fixed it (branch `fix/release-settings-save`).
+The debug build and the tests never hit this because they don't use R8.
 
 **Peer observation and revision (TODO):**
 
@@ -107,6 +115,8 @@ Session Scout: card, PR 7, `test/session_scout_test.dart`).
   to a future date. Moved it to a past date.
 - **Merge conflict:** settings and Session Scout both changed the editor file.
   It was only the import lines, so I kept both.
+- **Settings not saving in the release apk:** found on the S22, see test 4 above.
+  Cause was R8 shrinking, fixed by turning it off for release.
 - **Timer leaks:** I wanted proof the timer stops when you leave the screen.
   There's a widget test that leaves a running session, and the test framework
   fails if a timer is left running.
