@@ -6,8 +6,8 @@ Howard Fletcher, Mobile App Development, Project 1, Fall 2026
 Repo: https://github.com/Howflet/Adaptive-Focus-Studio
 Board: https://app.clickup.com/90141788557/v/b/li/901422483479
 
-Parts marked **TODO** are things only I can fill in (device testing, peer
-feedback, my own reflection). I left them empty on purpose instead of guessing.
+Parts marked **TODO** are things only I can fill in (a second device test, my own
+reflection). I left them empty on purpose instead of guessing.
 
 ## 1. What I built
 
@@ -71,13 +71,8 @@ plugin needs. Turning off minify and shrinkResources for the release build in
 `android/app/build.gradle.kts` fixed it (branch `fix/release-settings-save`).
 The debug build and the tests never hit this because they don't use R8.
 
-**Peer observation and revision (TODO):**
-
-- Who tried it: TODO
-- What I saw: TODO
-- Change I made: TODO
-- Before / after screenshots: TODO
-- How I checked the change works: TODO
+**Peer observation and revision:** not done. This is a solo project and I
+chose to skip it, so there is no peer feedback or before/after change to show.
 
 ## 4. Workflow (ClickUp and GitHub)
 

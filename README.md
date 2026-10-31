@@ -131,4 +131,4 @@ Settings are in SharedPreferences: `defaultDurationMinutes` (25),
 - "Sound effects" only plays the phone's built-in click sound when you finish. There are no custom sounds.
 - The tests run SQLite on the computer (sqflite_common_ffi), not on a phone, so they don't replace trying it on a device.
 - Landscape and big text sizes haven't been properly checked yet.
-- TODO: two-device offline test results and the peer observation are not in yet, see REPORT.md.
+- Only tested on one phone (Galaxy S22). No second-device test and no peer observation, see REPORT.md.
