@@ -6,8 +6,8 @@ Howard Fletcher, Mobile App Development, Project 1, Fall 2026
 Repo: https://github.com/Howflet/Adaptive-Focus-Studio
 Board: https://app.clickup.com/90141788557/v/b/li/901422483479
 
-The task to code to test trace for the video is still a TODO, since I'll pick the
-card when I record it.
+Demo video: https://youtu.be/p0zjTUjN5_8 (it ends with the task to code to test
+trace for Session Scout, summarized in section 4).
 
 ## 1. What I built
 
@@ -86,8 +86,9 @@ chose to skip it, so there is no peer feedback or before/after change to show.
   in progress and 2 in review. A card moved to Complete only after its pull
   request was merged.
 - Every feature went through a branch and a pull request (PRs 1 to 8 so far).
-- Board snapshots so far: Oct 20 and Oct 23 in `docs/snapshots/`. The Oct 27
-  snapshot and the Kanban evidence PDF come with the final package.
+- Board snapshots so far: Oct 20 and Oct 23 in `docs/snapshots/`. The Kanban
+  evidence PDF is `docs/Kanban_Contribution_Evidence.pdf`. I missed the Oct 24 and Oct 27
+  snapshots.
 
 Honest notes on the schedule:
 
@@ -102,9 +103,15 @@ Honest notes on the schedule:
 | Session Scout | Oct 23 | Oct 23 |
 
 The first two cards were late, and the early commits are bunched up. The
-git history has 35 commits on two days (Oct 20 and Oct 23), then docs after that.
-Task to code to test trace for the video: TODO (pick one card, for example
-Session Scout: card, PR 7, `test/session_scout_test.dart`).
+git history has 52 commits on main and 43 of them are on two days (Oct 20 and
+Oct 23), then docs after that.
+Task to code to test trace (Session Scout, shown at the end of the video):
+ClickUp card "Session Scout and test fixtures", branch `feature/session-scout`,
+pull request 7. Code: 644406d (Scout function, `lib/helpers/session_scout.dart`)
+and c2b4e4b (Scout card, `lib/widgets/scout_card.dart`). Tests: 744e868
+(cases C1 to C6 and the evaluation, `test/session_scout_test.dart`) and bc72c28
+(editor tests, `test/scout_card_test.dart`). All pass, PR 7 merged on Oct 23,
+then the card moved to Complete.
 
 ## 5. Problems I ran into
 
