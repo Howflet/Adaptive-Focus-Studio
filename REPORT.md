@@ -6,8 +6,8 @@ Howard Fletcher, Mobile App Development, Project 1, Fall 2026
 Repo: https://github.com/Howflet/Adaptive-Focus-Studio
 Board: https://app.clickup.com/90141788557/v/b/li/901422483479
 
-The task to code to test trace for the video is still a TODO, since I'll pick the
-card when I record it.
+Demo video: https://youtu.be/p0zjTUjN5_8 (it ends with the task to code to test
+trace for Session Scout, summarized in section 4).
 
 ## 1. What I built
 
@@ -105,8 +105,13 @@ Honest notes on the schedule:
 The first two cards were late, and the early commits are bunched up. The
 git history has 52 commits on main and 43 of them are on two days (Oct 20 and
 Oct 23), then docs after that.
-Task to code to test trace for the video: TODO (pick one card, for example
-Session Scout: card, PR 7, `test/session_scout_test.dart`).
+Task to code to test trace (Session Scout, shown at the end of the video):
+ClickUp card "Session Scout and test fixtures", branch `feature/session-scout`,
+pull request 7. Code: 644406d (Scout function, `lib/helpers/session_scout.dart`)
+and c2b4e4b (Scout card, `lib/widgets/scout_card.dart`). Tests: 744e868
+(cases C1 to C6 and the evaluation, `test/session_scout_test.dart`) and bc72c28
+(editor tests, `test/scout_card_test.dart`). All pass, PR 7 merged on Oct 23,
+then the card moved to Complete.
 
 ## 5. Problems I ran into
 
