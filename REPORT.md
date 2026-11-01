@@ -134,4 +134,24 @@ my account. Commit history: https://github.com/Howflet/Adaptive-Focus-Studio/com
 
 ## 8. What I learned
 
-TODO
+- **Passing tests isn't the same as a working app.** All 56 tests passed, but on
+  the S22 the release build couldn't save settings. The cause was R8 shrinking,
+  which the tests and the debug build never use. I only found it by restarting
+  the real app. Next time I'd install the release APK on a phone early, not at
+  the end.
+- **Keeping rules out of the widgets paid off.** Because the timer rules and
+  Session Scout are plain Dart, I could test them with a fake clock and made-up
+  logs without waiting real minutes or running the UI.
+- **Widget tests with SQLite are fussy.** The database doesn't run on the fake
+  test clock, so I needed `tester.runAsync` and a `settle()` helper before the
+  tests stopped hanging.
+- **Session Scout is small and honest about it.** The median of three beat the
+  25 minute baseline on my six made-up cases, but I wrote the cases myself, so it
+  proves little. The 20, 25, 58 counterexample shows what it can't do.
+- **The board got behind.** The first cards were late and the commits are bunched
+  on two days. Smaller cards and committing as I go would have shown steadier
+  progress.
+- **What I skipped:** a peer observation (solo project) and a second physical
+  phone. I used an emulator for the second environment.
+- **If I had more time:** restore a running timer after the app is killed, try
+  a window of 5 sessions in Scout, and check landscape and large text.
